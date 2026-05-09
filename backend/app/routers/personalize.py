@@ -2,14 +2,14 @@ import json
 
 from fastapi import APIRouter
 
-from ..graph_store import get_base_graph, set_user_graph
+from ..graph_store import get_base_graph, set_user_graph, set_user_profile
 from ..llm import call_llm
 from ..models import UserProfile, KnowledgeGraph
 
 router = APIRouter()
 
 
-@router.post("/personalize", response_model=KnowledgeGraph)
+@router.post("/personalize")
 def personalize(profile: UserProfile):
     base = get_base_graph()
 
@@ -37,11 +37,17 @@ def personalize(profile: UserProfile):
     cleaned = result.strip()
     if cleaned.startswith("```"):
         cleaned = cleaned.split("\n", 1)[1].rsplit("```", 1)[0]
+    elif cleaned.startswith("```json"):
+        cleaned = cleaned.split("\n", 1)[1].rsplit("```", 1)[0]
 
     data = json.loads(cleaned)
     personalized = KnowledgeGraph(**data)
 
+    # Use a simpler user_id for easier testing if needed, or keep the hash
     user_id = f"{profile.language}_{profile.goal}_{hash(profile.model_dump_json()) % 10000}"
+    user_id = user_id.replace(" ", "_").lower()
+    
     set_user_graph(user_id, personalized)
+    set_user_profile(user_id, profile)
 
-    return personalized
+    return {"user_id": user_id, "graph": personalized.model_dump()}

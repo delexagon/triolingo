@@ -3,11 +3,13 @@ from pathlib import Path
 
 import networkx as nx
 
-from .models import KnowledgeGraph, GraphNode, GraphEdge
+from .models import KnowledgeGraph, GraphNode, GraphEdge, UserProfile, Message
 
 BASE_GRAPH_PATH = Path(__file__).parent.parent / "data" / "base_graph.json"
 
 _user_graphs: dict[str, nx.DiGraph] = {}
+_user_profiles: dict[str, UserProfile] = {}
+_chat_histories: dict[str, list[Message]] = {}
 
 
 def _load_base_graph() -> KnowledgeGraph:
@@ -56,3 +58,23 @@ def update_node_status(user_id: str, node_id: str, status: str) -> None:
 
 def get_user_kg(user_id: str) -> KnowledgeGraph:
     return _nx_to_kg(_user_graphs[user_id])
+
+
+def set_user_profile(user_id: str, profile: UserProfile) -> None:
+    _user_profiles[user_id] = profile
+
+
+def get_user_profile(user_id: str) -> UserProfile:
+    return _user_profiles[user_id]
+
+
+def get_chat_history(user_id: str) -> list[Message]:
+    if user_id not in _chat_histories:
+        _chat_histories[user_id] = []
+    return _chat_histories[user_id]
+
+
+def add_chat_message(user_id: str, message: Message) -> None:
+    if user_id not in _chat_histories:
+        _chat_histories[user_id] = []
+    _chat_histories[user_id].append(message)

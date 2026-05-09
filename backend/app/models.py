@@ -1,3 +1,4 @@
+# pyrefly: ignore [missing-import]
 from pydantic import BaseModel
 
 
@@ -50,3 +51,18 @@ class GradeRequest(BaseModel):
     node_id: str
     exercise_id: str
     answer: str
+
+
+class ChatRequest(BaseModel):
+    user_id: str
+    message: str
+
+
+class Message(BaseModel):
+    role: str
+    content: str
+
+
+class ChatResponse(BaseModel):
+    message: str
+    recommended_nodes: list[dict] = []
