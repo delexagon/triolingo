@@ -6,6 +6,7 @@ export function RootLayout() {
 
   const navItems = [
     { path: '/', label: 'Home', icon: Home },
+    { path: '/assessment', label: 'Assessment', icon: ClipboardCheck },
     { path: '/learning-path', label: 'Learning Path', icon: Map },
     { path: '/progress', label: 'Progress', icon: TrendingUp },
     { path: '/resources', label: 'Resources', icon: BookOpen },
