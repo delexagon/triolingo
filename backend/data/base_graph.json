@@ -1,4 +1,655 @@
 {
-  "nodes": [],
-  "edges": []
+  "nodes": [
+    {
+      "id": "alphabet_pronunciation",
+      "label": "Alphabet & Pronunciation",
+      "type": "pronunciation",
+      "difficulty": 1,
+      "tags": ["foundational", "speaking"],
+      "status": "unknown"
+    },
+    {
+      "id": "vowel_sounds",
+      "label": "Spanish Vowel Sounds",
+      "type": "pronunciation",
+      "difficulty": 1,
+      "tags": ["foundational", "speaking"],
+      "status": "unknown"
+    },
+    {
+      "id": "accent_marks",
+      "label": "Accent Marks & Stress Rules",
+      "type": "pronunciation",
+      "difficulty": 2,
+      "tags": ["foundational", "writing"],
+      "status": "unknown"
+    },
+    {
+      "id": "greetings",
+      "label": "Greetings & Farewells",
+      "type": "vocabulary",
+      "difficulty": 1,
+      "tags": ["conversational", "travel", "foundational"],
+      "status": "unknown"
+    },
+    {
+      "id": "numbers_1_100",
+      "label": "Numbers 1–100",
+      "type": "vocabulary",
+      "difficulty": 1,
+      "tags": ["foundational", "travel", "shopping"],
+      "status": "unknown"
+    },
+    {
+      "id": "days_months",
+      "label": "Days of the Week & Months",
+      "type": "vocabulary",
+      "difficulty": 1,
+      "tags": ["foundational", "travel", "scheduling"],
+      "status": "unknown"
+    },
+    {
+      "id": "colors",
+      "label": "Colors",
+      "type": "vocabulary",
+      "difficulty": 1,
+      "tags": ["foundational", "descriptive"],
+      "status": "unknown"
+    },
+    {
+      "id": "family_members",
+      "label": "Family Members",
+      "type": "vocabulary",
+      "difficulty": 1,
+      "tags": ["conversational", "people"],
+      "status": "unknown"
+    },
+    {
+      "id": "food_drink_basics",
+      "label": "Basic Food & Drink Words",
+      "type": "vocabulary",
+      "difficulty": 1,
+      "tags": ["travel", "restaurant", "foundational"],
+      "status": "unknown"
+    },
+    {
+      "id": "clothing",
+      "label": "Clothing Vocabulary",
+      "type": "vocabulary",
+      "difficulty": 2,
+      "tags": ["shopping", "descriptive"],
+      "status": "unknown"
+    },
+    {
+      "id": "body_parts",
+      "label": "Body Parts",
+      "type": "vocabulary",
+      "difficulty": 2,
+      "tags": ["health", "descriptive"],
+      "status": "unknown"
+    },
+    {
+      "id": "weather_vocab",
+      "label": "Weather Vocabulary",
+      "type": "vocabulary",
+      "difficulty": 2,
+      "tags": ["conversational", "travel"],
+      "status": "unknown"
+    },
+    {
+      "id": "house_rooms",
+      "label": "House & Room Vocabulary",
+      "type": "vocabulary",
+      "difficulty": 2,
+      "tags": ["daily_life", "descriptive"],
+      "status": "unknown"
+    },
+    {
+      "id": "professions",
+      "label": "Professions & Occupations",
+      "type": "vocabulary",
+      "difficulty": 2,
+      "tags": ["conversational", "people", "work"],
+      "status": "unknown"
+    },
+    {
+      "id": "travel_transport",
+      "label": "Travel & Transportation Words",
+      "type": "vocabulary",
+      "difficulty": 2,
+      "tags": ["travel", "directions"],
+      "status": "unknown"
+    },
+    {
+      "id": "noun_gender",
+      "label": "Noun Gender (el / la)",
+      "type": "grammar",
+      "difficulty": 1,
+      "tags": ["foundational", "grammar_core"],
+      "status": "unknown"
+    },
+    {
+      "id": "plural_nouns",
+      "label": "Plural Nouns",
+      "type": "grammar",
+      "difficulty": 1,
+      "tags": ["foundational", "grammar_core"],
+      "status": "unknown"
+    },
+    {
+      "id": "definite_indefinite_articles",
+      "label": "Definite & Indefinite Articles",
+      "type": "grammar",
+      "difficulty": 1,
+      "tags": ["foundational", "grammar_core"],
+      "status": "unknown"
+    },
+    {
+      "id": "subject_pronouns",
+      "label": "Subject Pronouns (yo, tú, él...)",
+      "type": "grammar",
+      "difficulty": 1,
+      "tags": ["foundational", "grammar_core", "verb"],
+      "status": "unknown"
+    },
+    {
+      "id": "ser_present",
+      "label": "Ser in Present Tense",
+      "type": "grammar",
+      "difficulty": 1,
+      "tags": ["verb", "foundational", "identity"],
+      "status": "unknown"
+    },
+    {
+      "id": "estar_present",
+      "label": "Estar in Present Tense",
+      "type": "grammar",
+      "difficulty": 1,
+      "tags": ["verb", "foundational", "location", "emotion"],
+      "status": "unknown"
+    },
+    {
+      "id": "ser_vs_estar",
+      "label": "Ser vs Estar",
+      "type": "grammar",
+      "difficulty": 2,
+      "tags": ["verb", "grammar_core", "nuance"],
+      "status": "unknown"
+    },
+    {
+      "id": "present_tense_regular_ar",
+      "label": "Present Tense: Regular -AR Verbs",
+      "type": "grammar",
+      "difficulty": 2,
+      "tags": ["verb", "conjugation", "foundational"],
+      "status": "unknown"
+    },
+    {
+      "id": "present_tense_regular_er_ir",
+      "label": "Present Tense: Regular -ER / -IR Verbs",
+      "type": "grammar",
+      "difficulty": 2,
+      "tags": ["verb", "conjugation", "foundational"],
+      "status": "unknown"
+    },
+    {
+      "id": "tener_present",
+      "label": "Tener in Present Tense",
+      "type": "grammar",
+      "difficulty": 2,
+      "tags": ["verb", "irregular", "foundational"],
+      "status": "unknown"
+    },
+    {
+      "id": "tener_expressions",
+      "label": "Tener Expressions (tengo hambre, tengo frío...)",
+      "type": "grammar",
+      "difficulty": 2,
+      "tags": ["verb", "idiom", "conversational"],
+      "status": "unknown"
+    },
+    {
+      "id": "ir_present",
+      "label": "Ir in Present Tense",
+      "type": "grammar",
+      "difficulty": 2,
+      "tags": ["verb", "irregular", "foundational", "travel"],
+      "status": "unknown"
+    },
+    {
+      "id": "ir_a_infinitive",
+      "label": "Ir + a + Infinitive (Near Future)",
+      "type": "grammar",
+      "difficulty": 2,
+      "tags": ["verb", "future", "conversational"],
+      "status": "unknown"
+    },
+    {
+      "id": "hacer_present",
+      "label": "Hacer in Present Tense",
+      "type": "grammar",
+      "difficulty": 2,
+      "tags": ["verb", "irregular"],
+      "status": "unknown"
+    },
+    {
+      "id": "querer_poder_present",
+      "label": "Querer & Poder in Present Tense",
+      "type": "grammar",
+      "difficulty": 2,
+      "tags": ["verb", "irregular", "conversational", "request"],
+      "status": "unknown"
+    },
+    {
+      "id": "adjective_agreement",
+      "label": "Adjective Agreement (Gender & Number)",
+      "type": "grammar",
+      "difficulty": 2,
+      "tags": ["grammar_core", "descriptive"],
+      "status": "unknown"
+    },
+    {
+      "id": "adjective_placement",
+      "label": "Adjective Placement",
+      "type": "grammar",
+      "difficulty": 2,
+      "tags": ["grammar_core", "descriptive"],
+      "status": "unknown"
+    },
+    {
+      "id": "possessive_adjectives",
+      "label": "Possessive Adjectives (mi, tu, su...)",
+      "type": "grammar",
+      "difficulty": 2,
+      "tags": ["grammar_core", "conversational"],
+      "status": "unknown"
+    },
+    {
+      "id": "demonstratives",
+      "label": "Demonstratives (este, ese, aquel)",
+      "type": "grammar",
+      "difficulty": 2,
+      "tags": ["grammar_core", "shopping", "pointing"],
+      "status": "unknown"
+    },
+    {
+      "id": "question_words",
+      "label": "Question Words (qué, dónde, cuándo...)",
+      "type": "grammar",
+      "difficulty": 1,
+      "tags": ["foundational", "conversational"],
+      "status": "unknown"
+    },
+    {
+      "id": "negation",
+      "label": "Negation (no, nunca, nada...)",
+      "type": "grammar",
+      "difficulty": 2,
+      "tags": ["grammar_core", "conversational"],
+      "status": "unknown"
+    },
+    {
+      "id": "direct_object_pronouns",
+      "label": "Direct Object Pronouns (lo, la, los, las)",
+      "type": "grammar",
+      "difficulty": 3,
+      "tags": ["grammar_core", "pronoun"],
+      "status": "unknown"
+    },
+    {
+      "id": "indirect_object_pronouns",
+      "label": "Indirect Object Pronouns (me, te, le...)",
+      "type": "grammar",
+      "difficulty": 3,
+      "tags": ["grammar_core", "pronoun"],
+      "status": "unknown"
+    },
+    {
+      "id": "reflexive_verbs",
+      "label": "Reflexive Verbs (me levanto, se llama...)",
+      "type": "grammar",
+      "difficulty": 3,
+      "tags": ["verb", "daily_life", "routine"],
+      "status": "unknown"
+    },
+    {
+      "id": "gustar_construction",
+      "label": "Gustar & Similar Verbs",
+      "type": "grammar",
+      "difficulty": 3,
+      "tags": ["verb", "conversational", "opinion"],
+      "status": "unknown"
+    },
+    {
+      "id": "preterite_regular",
+      "label": "Preterite Tense: Regular Verbs",
+      "type": "grammar",
+      "difficulty": 3,
+      "tags": ["verb", "conjugation", "past"],
+      "status": "unknown"
+    },
+    {
+      "id": "preterite_irregular",
+      "label": "Preterite Tense: Irregular Verbs",
+      "type": "grammar",
+      "difficulty": 3,
+      "tags": ["verb", "conjugation", "past", "irregular"],
+      "status": "unknown"
+    },
+    {
+      "id": "imperfect_tense",
+      "label": "Imperfect Tense",
+      "type": "grammar",
+      "difficulty": 3,
+      "tags": ["verb", "conjugation", "past"],
+      "status": "unknown"
+    },
+    {
+      "id": "preterite_vs_imperfect",
+      "label": "Preterite vs Imperfect",
+      "type": "grammar",
+      "difficulty": 4,
+      "tags": ["verb", "past", "nuance"],
+      "status": "unknown"
+    },
+    {
+      "id": "present_progressive",
+      "label": "Present Progressive (estar + -ando/-iendo)",
+      "type": "grammar",
+      "difficulty": 3,
+      "tags": ["verb", "conversational"],
+      "status": "unknown"
+    },
+    {
+      "id": "comparatives_superlatives",
+      "label": "Comparatives & Superlatives",
+      "type": "grammar",
+      "difficulty": 3,
+      "tags": ["grammar_core", "descriptive", "opinion"],
+      "status": "unknown"
+    },
+    {
+      "id": "por_vs_para",
+      "label": "Por vs Para",
+      "type": "grammar",
+      "difficulty": 4,
+      "tags": ["grammar_core", "nuance", "preposition"],
+      "status": "unknown"
+    },
+    {
+      "id": "subjunctive_intro",
+      "label": "Subjunctive Mood (Introduction)",
+      "type": "grammar",
+      "difficulty": 4,
+      "tags": ["verb", "advanced", "nuance"],
+      "status": "unknown"
+    },
+    {
+      "id": "commands_informal",
+      "label": "Informal Commands (tú)",
+      "type": "grammar",
+      "difficulty": 3,
+      "tags": ["verb", "conversational", "request"],
+      "status": "unknown"
+    },
+    {
+      "id": "commands_formal",
+      "label": "Formal Commands (usted)",
+      "type": "grammar",
+      "difficulty": 3,
+      "tags": ["verb", "formal", "request", "travel"],
+      "status": "unknown"
+    },
+    {
+      "id": "introduce_yourself",
+      "label": "Introducing Yourself",
+      "type": "conversational",
+      "difficulty": 1,
+      "tags": ["conversational", "foundational", "travel"],
+      "status": "unknown"
+    },
+    {
+      "id": "asking_directions",
+      "label": "Asking for Directions",
+      "type": "conversational",
+      "difficulty": 2,
+      "tags": ["travel", "conversational", "directions"],
+      "status": "unknown"
+    },
+    {
+      "id": "ordering_food",
+      "label": "Ordering Food at a Restaurant",
+      "type": "conversational",
+      "difficulty": 2,
+      "tags": ["travel", "restaurant", "conversational"],
+      "status": "unknown"
+    },
+    {
+      "id": "shopping_bargaining",
+      "label": "Shopping & Asking Prices",
+      "type": "conversational",
+      "difficulty": 2,
+      "tags": ["travel", "shopping", "conversational"],
+      "status": "unknown"
+    },
+    {
+      "id": "hotel_checkin",
+      "label": "Hotel Check-in & Requests",
+      "type": "conversational",
+      "difficulty": 2,
+      "tags": ["travel", "conversational", "formal"],
+      "status": "unknown"
+    },
+    {
+      "id": "describing_people",
+      "label": "Describing People",
+      "type": "conversational",
+      "difficulty": 2,
+      "tags": ["descriptive", "conversational"],
+      "status": "unknown"
+    },
+    {
+      "id": "talking_about_weather",
+      "label": "Talking About the Weather",
+      "type": "conversational",
+      "difficulty": 2,
+      "tags": ["conversational", "small_talk"],
+      "status": "unknown"
+    },
+    {
+      "id": "expressing_opinions",
+      "label": "Expressing Opinions & Preferences",
+      "type": "conversational",
+      "difficulty": 3,
+      "tags": ["conversational", "opinion"],
+      "status": "unknown"
+    },
+    {
+      "id": "making_plans",
+      "label": "Making Plans & Invitations",
+      "type": "conversational",
+      "difficulty": 3,
+      "tags": ["conversational", "social", "future"],
+      "status": "unknown"
+    },
+    {
+      "id": "telling_stories_past",
+      "label": "Telling Stories About the Past",
+      "type": "conversational",
+      "difficulty": 4,
+      "tags": ["conversational", "past", "narrative"],
+      "status": "unknown"
+    },
+    {
+      "id": "phone_calls",
+      "label": "Phone Calls & Messaging",
+      "type": "conversational",
+      "difficulty": 3,
+      "tags": ["conversational", "daily_life"],
+      "status": "unknown"
+    },
+    {
+      "id": "doctor_emergency",
+      "label": "At the Doctor / Emergency Phrases",
+      "type": "conversational",
+      "difficulty": 3,
+      "tags": ["travel", "health", "emergency"],
+      "status": "unknown"
+    },
+    {
+      "id": "daily_routine",
+      "label": "Describing Your Daily Routine",
+      "type": "conversational",
+      "difficulty": 2,
+      "tags": ["daily_life", "conversational", "routine"],
+      "status": "unknown"
+    },
+    {
+      "id": "tu_vs_usted",
+      "label": "Tú vs Usted (Formal vs Informal)",
+      "type": "cultural",
+      "difficulty": 2,
+      "tags": ["cultural", "conversational", "formal"],
+      "status": "unknown"
+    },
+    {
+      "id": "politeness_formulas",
+      "label": "Politeness Phrases (por favor, con permiso...)",
+      "type": "cultural",
+      "difficulty": 1,
+      "tags": ["cultural", "conversational", "travel", "foundational"],
+      "status": "unknown"
+    },
+    {
+      "id": "mexican_slang",
+      "label": "Common Mexican Slang & Expressions",
+      "type": "cultural",
+      "difficulty": 3,
+      "tags": ["cultural", "conversational", "regional"],
+      "status": "unknown"
+    },
+    {
+      "id": "dining_etiquette",
+      "label": "Dining Etiquette & Tipping Culture",
+      "type": "cultural",
+      "difficulty": 2,
+      "tags": ["cultural", "travel", "restaurant"],
+      "status": "unknown"
+    },
+    {
+      "id": "time_telling",
+      "label": "Telling Time",
+      "type": "vocabulary",
+      "difficulty": 1,
+      "tags": ["foundational", "daily_life", "scheduling"],
+      "status": "unknown"
+    },
+    {
+      "id": "prepositions_location",
+      "label": "Prepositions of Location (en, sobre, debajo...)",
+      "type": "grammar",
+      "difficulty": 2,
+      "tags": ["grammar_core", "directions", "descriptive"],
+      "status": "unknown"
+    }
+  ],
+  "edges": [
+    { "source": "alphabet_pronunciation", "target": "vowel_sounds", "relationship": "prerequisite" },
+    { "source": "vowel_sounds", "target": "accent_marks", "relationship": "prerequisite" },
+    { "source": "alphabet_pronunciation", "target": "greetings", "relationship": "prerequisite" },
+    { "source": "greetings", "target": "introduce_yourself", "relationship": "prerequisite" },
+    { "source": "subject_pronouns", "target": "introduce_yourself", "relationship": "prerequisite" },
+    { "source": "ser_present", "target": "introduce_yourself", "relationship": "prerequisite" },
+    { "source": "alphabet_pronunciation", "target": "numbers_1_100", "relationship": "prerequisite" },
+    { "source": "alphabet_pronunciation", "target": "days_months", "relationship": "prerequisite" },
+    { "source": "alphabet_pronunciation", "target": "colors", "relationship": "prerequisite" },
+    { "source": "alphabet_pronunciation", "target": "food_drink_basics", "relationship": "prerequisite" },
+    { "source": "noun_gender", "target": "definite_indefinite_articles", "relationship": "prerequisite" },
+    { "source": "noun_gender", "target": "plural_nouns", "relationship": "prerequisite" },
+    { "source": "noun_gender", "target": "adjective_agreement", "relationship": "prerequisite" },
+    { "source": "plural_nouns", "target": "adjective_agreement", "relationship": "prerequisite" },
+    { "source": "adjective_agreement", "target": "adjective_placement", "relationship": "prerequisite" },
+    { "source": "adjective_agreement", "target": "describing_people", "relationship": "prerequisite" },
+    { "source": "ser_present", "target": "describing_people", "relationship": "prerequisite" },
+    { "source": "estar_present", "target": "describing_people", "relationship": "prerequisite" },
+    { "source": "subject_pronouns", "target": "ser_present", "relationship": "prerequisite" },
+    { "source": "subject_pronouns", "target": "estar_present", "relationship": "prerequisite" },
+    { "source": "ser_present", "target": "ser_vs_estar", "relationship": "prerequisite" },
+    { "source": "estar_present", "target": "ser_vs_estar", "relationship": "prerequisite" },
+    { "source": "subject_pronouns", "target": "present_tense_regular_ar", "relationship": "prerequisite" },
+    { "source": "present_tense_regular_ar", "target": "present_tense_regular_er_ir", "relationship": "prerequisite" },
+    { "source": "subject_pronouns", "target": "tener_present", "relationship": "prerequisite" },
+    { "source": "tener_present", "target": "tener_expressions", "relationship": "prerequisite" },
+    { "source": "subject_pronouns", "target": "ir_present", "relationship": "prerequisite" },
+    { "source": "ir_present", "target": "ir_a_infinitive", "relationship": "prerequisite" },
+    { "source": "subject_pronouns", "target": "hacer_present", "relationship": "prerequisite" },
+    { "source": "subject_pronouns", "target": "querer_poder_present", "relationship": "prerequisite" },
+    { "source": "definite_indefinite_articles", "target": "demonstratives", "relationship": "prerequisite" },
+    { "source": "subject_pronouns", "target": "possessive_adjectives", "relationship": "prerequisite" },
+    { "source": "alphabet_pronunciation", "target": "question_words", "relationship": "prerequisite" },
+    { "source": "present_tense_regular_ar", "target": "negation", "relationship": "prerequisite" },
+    { "source": "present_tense_regular_er_ir", "target": "direct_object_pronouns", "relationship": "prerequisite" },
+    { "source": "direct_object_pronouns", "target": "indirect_object_pronouns", "relationship": "prerequisite" },
+    { "source": "present_tense_regular_ar", "target": "reflexive_verbs", "relationship": "prerequisite" },
+    { "source": "subject_pronouns", "target": "reflexive_verbs", "relationship": "prerequisite" },
+    { "source": "indirect_object_pronouns", "target": "gustar_construction", "relationship": "prerequisite" },
+    { "source": "present_tense_regular_ar", "target": "preterite_regular", "relationship": "prerequisite" },
+    { "source": "present_tense_regular_er_ir", "target": "preterite_regular", "relationship": "prerequisite" },
+    { "source": "preterite_regular", "target": "preterite_irregular", "relationship": "prerequisite" },
+    { "source": "preterite_regular", "target": "imperfect_tense", "relationship": "prerequisite" },
+    { "source": "preterite_irregular", "target": "preterite_vs_imperfect", "relationship": "prerequisite" },
+    { "source": "imperfect_tense", "target": "preterite_vs_imperfect", "relationship": "prerequisite" },
+    { "source": "estar_present", "target": "present_progressive", "relationship": "prerequisite" },
+    { "source": "present_tense_regular_ar", "target": "present_progressive", "relationship": "prerequisite" },
+    { "source": "adjective_agreement", "target": "comparatives_superlatives", "relationship": "prerequisite" },
+    { "source": "present_tense_regular_ar", "target": "por_vs_para", "relationship": "prerequisite" },
+    { "source": "present_tense_regular_er_ir", "target": "subjunctive_intro", "relationship": "prerequisite" },
+    { "source": "preterite_regular", "target": "subjunctive_intro", "relationship": "prerequisite" },
+    { "source": "present_tense_regular_ar", "target": "commands_informal", "relationship": "prerequisite" },
+    { "source": "present_tense_regular_ar", "target": "commands_formal", "relationship": "prerequisite" },
+    { "source": "tu_vs_usted", "target": "commands_formal", "relationship": "prerequisite" },
+    { "source": "question_words", "target": "asking_directions", "relationship": "prerequisite" },
+    { "source": "prepositions_location", "target": "asking_directions", "relationship": "prerequisite" },
+    { "source": "ir_present", "target": "asking_directions", "relationship": "prerequisite" },
+    { "source": "food_drink_basics", "target": "ordering_food", "relationship": "prerequisite" },
+    { "source": "querer_poder_present", "target": "ordering_food", "relationship": "prerequisite" },
+    { "source": "numbers_1_100", "target": "ordering_food", "relationship": "prerequisite" },
+    { "source": "politeness_formulas", "target": "ordering_food", "relationship": "prerequisite" },
+    { "source": "numbers_1_100", "target": "shopping_bargaining", "relationship": "prerequisite" },
+    { "source": "demonstratives", "target": "shopping_bargaining", "relationship": "prerequisite" },
+    { "source": "querer_poder_present", "target": "shopping_bargaining", "relationship": "prerequisite" },
+    { "source": "politeness_formulas", "target": "hotel_checkin", "relationship": "prerequisite" },
+    { "source": "tener_present", "target": "hotel_checkin", "relationship": "prerequisite" },
+    { "source": "tu_vs_usted", "target": "hotel_checkin", "relationship": "prerequisite" },
+    { "source": "hacer_present", "target": "talking_about_weather", "relationship": "prerequisite" },
+    { "source": "weather_vocab", "target": "talking_about_weather", "relationship": "prerequisite" },
+    { "source": "gustar_construction", "target": "expressing_opinions", "relationship": "prerequisite" },
+    { "source": "comparatives_superlatives", "target": "expressing_opinions", "relationship": "prerequisite" },
+    { "source": "ir_a_infinitive", "target": "making_plans", "relationship": "prerequisite" },
+    { "source": "querer_poder_present", "target": "making_plans", "relationship": "prerequisite" },
+    { "source": "days_months", "target": "making_plans", "relationship": "prerequisite" },
+    { "source": "preterite_vs_imperfect", "target": "telling_stories_past", "relationship": "prerequisite" },
+    { "source": "greetings", "target": "phone_calls", "relationship": "prerequisite" },
+    { "source": "querer_poder_present", "target": "phone_calls", "relationship": "prerequisite" },
+    { "source": "body_parts", "target": "doctor_emergency", "relationship": "prerequisite" },
+    { "source": "tener_expressions", "target": "doctor_emergency", "relationship": "prerequisite" },
+    { "source": "reflexive_verbs", "target": "daily_routine", "relationship": "prerequisite" },
+    { "source": "time_telling", "target": "daily_routine", "relationship": "prerequisite" },
+    { "source": "subject_pronouns", "target": "tu_vs_usted", "relationship": "prerequisite" },
+    { "source": "greetings", "target": "politeness_formulas", "relationship": "prerequisite" },
+    { "source": "present_tense_regular_ar", "target": "mexican_slang", "relationship": "prerequisite" },
+    { "source": "tu_vs_usted", "target": "mexican_slang", "relationship": "prerequisite" },
+    { "source": "ordering_food", "target": "dining_etiquette", "relationship": "prerequisite" },
+    { "source": "politeness_formulas", "target": "dining_etiquette", "relationship": "prerequisite" },
+    { "source": "numbers_1_100", "target": "time_telling", "relationship": "prerequisite" },
+    { "source": "estar_present", "target": "prepositions_location", "relationship": "prerequisite" },
+    { "source": "noun_gender", "target": "clothing", "relationship": "prerequisite" },
+    { "source": "alphabet_pronunciation", "target": "body_parts", "relationship": "prerequisite" },
+    { "source": "hacer_present", "target": "weather_vocab", "relationship": "related" },
+    { "source": "alphabet_pronunciation", "target": "family_members", "relationship": "prerequisite" },
+    { "source": "noun_gender", "target": "professions", "relationship": "prerequisite" },
+    { "source": "ir_present", "target": "travel_transport", "relationship": "related" },
+    { "source": "noun_gender", "target": "house_rooms", "relationship": "prerequisite" },
+    { "source": "time_telling", "target": "making_plans", "relationship": "prerequisite" }
+  ]
 }
