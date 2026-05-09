@@ -1,5 +1,5 @@
 import { Outlet, Link, useLocation } from 'react-router';
-import { Home, Map, TrendingUp, BookOpen } from 'lucide-react';
+import { Home, Map, TrendingUp, BookOpen, ClipboardCheck } from 'lucide-react';
 
 export function RootLayout() {
   const location = useLocation();
