@@ -1,15 +1,13 @@
 import { CheckCircle2, ZoomIn, ZoomOut, Maximize2 } from 'lucide-react';
 import { useMemo, useState, useRef, useCallback } from 'react';
+import type { KnowledgeGraph } from '../api';
 
 interface LearningGraphProps {
-  config: {
-    timeLimit: string;
-    experienceLevel: string;
-    motivation: string;
-  };
+  graph: KnowledgeGraph;
+  subtitle?: string;
 }
 
-interface Node {
+interface LayoutNode {
   id: string;
   label: string;
   description: string;
@@ -18,10 +16,16 @@ interface Node {
   color: string;
 }
 
-interface Edge {
+interface LayoutEdge {
   from: string;
   to: string;
 }
+
+const STATUS_COLORS: Record<string, string> = {
+  known: '#22c55e',
+  weak: '#eab308',
+  unknown: '#6b7280',
+};
 
 const LEVEL_SPACING = 220;
 const ROW_SPACING = 130;
@@ -29,33 +33,109 @@ const OFFSET_X = 80;
 const OFFSET_Y = 80;
 const NODE_RADIUS = 24;
 
-function getNodeCoords(node: Node) {
+function getNodeCoords(node: LayoutNode) {
   return {
     x: node.level * LEVEL_SPACING + OFFSET_X,
     y: node.position * ROW_SPACING + OFFSET_Y,
   };
 }
 
-export function LearningGraph({ config }: LearningGraphProps) {
+function computeLayout(graph: KnowledgeGraph): { nodes: LayoutNode[]; edges: LayoutEdge[] } {
+  const prereqEdges = graph.edges.filter(e => e.relationship === 'prerequisite');
+  const inDegree: Record<string, number> = {};
+  const children: Record<string, string[]> = {};
+
+  for (const node of graph.nodes) {
+    inDegree[node.id] = 0;
+    children[node.id] = [];
+  }
+  for (const edge of prereqEdges) {
+    if (inDegree[edge.target] !== undefined) {
+      inDegree[edge.target]++;
+    }
+    if (children[edge.source]) {
+      children[edge.source].push(edge.target);
+    }
+  }
+
+  // BFS topological layering
+  const level: Record<string, number> = {};
+  const queue: string[] = [];
+  for (const node of graph.nodes) {
+    if (inDegree[node.id] === 0) {
+      queue.push(node.id);
+      level[node.id] = 0;
+    }
+  }
+
+  let head = 0;
+  while (head < queue.length) {
+    const curr = queue[head++];
+    for (const child of (children[curr] ?? [])) {
+      level[child] = Math.max(level[child] ?? 0, level[curr] + 1);
+      inDegree[child]--;
+      if (inDegree[child] === 0) {
+        queue.push(child);
+      }
+    }
+  }
+
+  // Assign nodes without edges to level 0
+  for (const node of graph.nodes) {
+    if (level[node.id] === undefined) {
+      level[node.id] = 0;
+    }
+  }
+
+  // Group by level and assign positions
+  const levelGroups: Record<number, string[]> = {};
+  for (const node of graph.nodes) {
+    const l = level[node.id];
+    if (!levelGroups[l]) levelGroups[l] = [];
+    levelGroups[l].push(node.id);
+  }
+
+  const nodeMap = new Map(graph.nodes.map(n => [n.id, n]));
+  const position: Record<string, number> = {};
+  for (const ids of Object.values(levelGroups)) {
+    ids.forEach((id, i) => { position[id] = i; });
+  }
+
+  const layoutNodes: LayoutNode[] = graph.nodes.map(n => ({
+    id: n.id,
+    label: n.label,
+    description: `${n.type} · difficulty ${n.difficulty}`,
+    level: level[n.id],
+    position: position[n.id],
+    color: STATUS_COLORS[n.status] ?? STATUS_COLORS.unknown,
+  }));
+
+  const layoutEdges: LayoutEdge[] = graph.edges.map(e => ({
+    from: e.source,
+    to: e.target,
+  }));
+
+  return { nodes: layoutNodes, edges: layoutEdges };
+}
+
+export function LearningGraph({ graph, subtitle }: LearningGraphProps) {
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);
 
-  // Zoom/pan state
   const [scale, setScale] = useState(1);
   const [translate, setTranslate] = useState({ x: 0, y: 0 });
   const isPanning = useRef(false);
   const lastMouse = useRef({ x: 0, y: 0 });
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const { nodes, edges } = useMemo(() => generateLearningPath(config), [config]);
+  const { nodes, edges } = useMemo(() => computeLayout(graph), [graph]);
 
-  // Compute SVG canvas size based on node positions
   const canvasWidth = useMemo(() => {
-    const maxLevel = Math.max(...nodes.map(n => n.level));
+    const maxLevel = Math.max(...nodes.map(n => n.level), 0);
     return maxLevel * LEVEL_SPACING + OFFSET_X * 2 + 160;
   }, [nodes]);
 
   const canvasHeight = useMemo(() => {
-    const maxPos = Math.max(...nodes.map(n => n.position));
+    const maxPos = Math.max(...nodes.map(n => n.position), 0);
     return maxPos * ROW_SPACING + OFFSET_Y * 2 + 60;
   }, [nodes]);
 
@@ -71,7 +151,6 @@ export function LearningGraph({ config }: LearningGraphProps) {
   }, []);
 
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
-    // Only pan on the background, not on nodes
     if ((e.target as HTMLElement).closest('.graph-node')) return;
     isPanning.current = true;
     lastMouse.current = { x: e.clientX, y: e.clientY };
@@ -94,11 +173,9 @@ export function LearningGraph({ config }: LearningGraphProps) {
       <div className="mb-6 flex items-start justify-between">
         <div>
           <h2 className="mb-2">Your Personalized Learning Path</h2>
-          <p className="text-gray-400">
-            Optimized for {getTimeLabel(config.timeLimit)} • {getMotivationLabel(config.motivation)}
-          </p>
+          {subtitle && <p className="text-gray-400">{subtitle}</p>}
+          <p className="text-xs text-gray-600 mt-1">{nodes.length} concepts · {edges.length} connections</p>
         </div>
-        {/* Zoom controls */}
         <div className="flex items-center gap-1">
           <button
             onClick={() => setScale(s => Math.min(s * 1.2, 3))}
@@ -127,7 +204,6 @@ export function LearningGraph({ config }: LearningGraphProps) {
         </div>
       </div>
 
-      {/* Graph container */}
       <div
         ref={containerRef}
         className="relative bg-black rounded-lg border border-gray-800 overflow-hidden select-none"
@@ -138,12 +214,10 @@ export function LearningGraph({ config }: LearningGraphProps) {
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseUp}
       >
-        {/* Hint */}
         <div className="absolute bottom-3 left-3 text-xs text-gray-600 pointer-events-none z-10">
           Scroll to zoom · Drag to pan · Hover nodes for details
         </div>
 
-        {/* Transformable layer */}
         <div
           style={{
             transform: `translate(${translate.x}px, ${translate.y}px) scale(${scale})`,
@@ -153,7 +227,6 @@ export function LearningGraph({ config }: LearningGraphProps) {
             position: 'absolute',
           }}
         >
-          {/* SVG for edges — same coordinate space as nodes */}
           <svg
             width={canvasWidth}
             height={canvasHeight}
@@ -167,25 +240,19 @@ export function LearningGraph({ config }: LearningGraphProps) {
               const { x: x1, y: y1 } = getNodeCoords(fromNode);
               const { x: x2, y: y2 } = getNodeCoords(toNode);
 
-              // Offset line endpoints to edge of circle
               const dx = x2 - x1;
               const dy = y2 - y1;
               const dist = Math.sqrt(dx * dx + dy * dy) || 1;
               const ux = dx / dist;
               const uy = dy / dist;
 
-              const startX = x1 + ux * NODE_RADIUS;
-              const startY = y1 + uy * NODE_RADIUS;
-              const endX = x2 - ux * (NODE_RADIUS); 
-              const endY = y2 - uy * (NODE_RADIUS);
-
               return (
                 <line
                   key={idx}
-                  x1={startX}
-                  y1={startY}
-                  x2={endX}
-                  y2={endY}
+                  x1={x1 + ux * NODE_RADIUS}
+                  y1={y1 + uy * NODE_RADIUS}
+                  x2={x2 - ux * NODE_RADIUS}
+                  y2={y2 - uy * NODE_RADIUS}
                   stroke="#39ff14"
                   strokeWidth="1.5"
                   opacity="0.35"
@@ -194,7 +261,6 @@ export function LearningGraph({ config }: LearningGraphProps) {
             })}
           </svg>
 
-          {/* Nodes rendered as HTML divs in same coordinate space */}
           {nodes.map((node) => {
             const { x, y } = getNodeCoords(node);
             const isHovered = hoveredNode === node.id;
@@ -254,15 +320,13 @@ export function LearningGraph({ config }: LearningGraphProps) {
         </div>
       </div>
 
-      {/* Legend */}
       <div className="mt-8 pt-6 border-t border-gray-800">
         <h3 className="font-medium mb-3">Legend</h3>
         <div className="flex flex-wrap gap-4">
           {[
-            { color: '#39ff14', label: 'Foundation' },
-            { color: '#ffffff', label: 'Core Skills' },
-            { color: '#2ee010', label: 'Advanced' },
-            { color: '#60ff60', label: 'Specialized' },
+            { color: STATUS_COLORS.known, label: 'Known' },
+            { color: STATUS_COLORS.weak, label: 'Weak' },
+            { color: STATUS_COLORS.unknown, label: 'Unknown' },
           ].map(({ color, label }) => (
             <div key={label} className="flex items-center gap-2">
               <div className="w-4 h-4 rounded" style={{ backgroundColor: color }} />
@@ -273,106 +337,4 @@ export function LearningGraph({ config }: LearningGraphProps) {
       </div>
     </div>
   );
-}
-
-function generateLearningPath(config: {
-  timeLimit: string;
-  experienceLevel: string;
-  motivation: string;
-}): { nodes: Node[]; edges: Edge[] } {
-  const nodes: Node[] = [];
-  const edges: Edge[] = [];
-
-  const isIntensive = config.timeLimit === '3months';
-  const skipBasics = ['intermediate', 'upper-intermediate'].includes(config.experienceLevel);
-
-  if (!skipBasics) {
-    nodes.push({ id: 'alphabet', label: 'Alphabet & Pronunciation', description: 'Master Spanish sounds and letters', level: 0, position: 0, color: '#39ff14' });
-    nodes.push({ id: 'basic-grammar', label: 'Basic Grammar', description: 'Present tense, articles, gender', level: 0, position: 1, color: '#39ff14' });
-    edges.push({ from: 'alphabet', to: 'basic-grammar' });
-  }
-
-  const startNode = skipBasics ? null : 'basic-grammar';
-
-  nodes.push({ id: 'vocabulary-foundation', label: 'Essential Vocabulary', description: 'Common words and phrases', level: skipBasics ? 0 : 1, position: 0, color: '#ffffff' });
-  if (startNode) edges.push({ from: startNode, to: 'vocabulary-foundation' });
-
-  const motivationSpecific = getMotivationModule(config.motivation);
-  nodes.push({ id: 'motivation-module', label: motivationSpecific.label, description: motivationSpecific.description, level: skipBasics ? 0 : 1, position: 1, color: '#ffffff' });
-  if (startNode) edges.push({ from: startNode, to: 'motivation-module' });
-
-  nodes.push({ id: 'conversation', label: 'Conversational Practice', description: 'Speaking and listening skills', level: skipBasics ? 1 : 2, position: 0, color: '#2ee010' });
-  edges.push({ from: 'vocabulary-foundation', to: 'conversation' });
-  edges.push({ from: 'motivation-module', to: 'conversation' });
-
-  nodes.push({ id: 'grammar-advanced', label: 'Advanced Grammar', description: 'Past tenses, subjunctive mood', level: skipBasics ? 1 : 2, position: 1, color: '#2ee010' });
-  edges.push({ from: 'vocabulary-foundation', to: 'grammar-advanced' });
-
-  if (!isIntensive) {
-    nodes.push({ id: 'culture', label: 'Cultural Immersion', description: 'Customs, media, and traditions', level: skipBasics ? 1 : 2, position: 2, color: '#2ee010' });
-    edges.push({ from: 'motivation-module', to: 'culture' });
-  }
-
-  nodes.push({ id: 'fluency', label: 'Fluency Building', description: 'Complex conversations', level: skipBasics ? 2 : 3, position: 0, color: '#60ff60' });
-  edges.push({ from: 'conversation', to: 'fluency' });
-  edges.push({ from: 'grammar-advanced', to: 'fluency' });
-
-  const specialization = getSpecializationModule(config.motivation);
-  nodes.push({ id: 'specialization', label: specialization.label, description: specialization.description, level: skipBasics ? 2 : 3, position: 1, color: '#60ff60' });
-  edges.push({ from: 'conversation', to: 'specialization' });
-  edges.push({ from: 'motivation-module', to: 'specialization' });
-
-  if (!isIntensive) {
-    nodes.push({ id: 'mastery', label: 'Native-Level Mastery', description: 'Idioms, nuance, regional dialects', level: skipBasics ? 3 : 4, position: 0, color: '#39ff14' });
-    edges.push({ from: 'fluency', to: 'mastery' });
-    edges.push({ from: 'specialization', to: 'mastery' });
-  }
-
-  return { nodes, edges };
-}
-
-function getMotivationModule(motivation: string) {
-  const modules: Record<string, { label: string; description: string }> = {
-    travel: { label: 'Travel Phrases', description: 'Hotels, restaurants, directions' },
-    work: { label: 'Business Spanish', description: 'Professional vocabulary and emails' },
-    academic: { label: 'Academic Spanish', description: 'Research, presentations, writing' },
-    cultural: { label: 'Cultural Context', description: 'Literature, art, history' },
-    family: { label: 'Daily Conversations', description: 'Family topics and casual talk' },
-    immigration: { label: 'Practical Living', description: 'Government, healthcare, shopping' },
-  };
-  return modules[motivation] ?? modules.travel;
-}
-
-function getSpecializationModule(motivation: string) {
-  const modules: Record<string, { label: string; description: string }> = {
-    travel: { label: 'Regional Variations', description: 'Latin America vs Spain differences' },
-    work: { label: 'Industry Terminology', description: 'Field-specific professional language' },
-    academic: { label: 'Academic Writing', description: 'Essays, thesis, formal writing' },
-    cultural: { label: 'Media Consumption', description: 'Books, films, podcasts in Spanish' },
-    family: { label: 'Deep Connections', description: 'Emotional expressions and nuance' },
-    immigration: { label: 'Civic Integration', description: 'Legal, cultural, community topics' },
-  };
-  return modules[motivation] ?? modules.travel;
-}
-
-function getTimeLabel(timeLimit: string): string {
-  const labels: Record<string, string> = {
-    '3months': '3-month intensive track',
-    '6months': '6-month moderate pace',
-    '1year': '1-year comfortable pace',
-    '2years': '2-year relaxed pace',
-  };
-  return labels[timeLimit] ?? timeLimit;
-}
-
-function getMotivationLabel(motivation: string): string {
-  const labels: Record<string, string> = {
-    travel: 'Travel & Tourism focus',
-    work: 'Professional/Business focus',
-    academic: 'Academic Studies focus',
-    cultural: 'Cultural Exploration focus',
-    family: 'Family & Relationships focus',
-    immigration: 'Immigration/Relocation focus',
-  };
-  return labels[motivation] ?? motivation;
 }
