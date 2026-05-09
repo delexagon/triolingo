@@ -28,6 +28,13 @@ class KnowledgeGraph(BaseModel):
     edges: list[GraphEdge]
 
 
+class PersonalizeResponse(BaseModel):
+    graph: KnowledgeGraph
+    llm_system: str
+    llm_prompt: str
+    llm_response: str
+
+
 class AssessmentRequest(BaseModel):
     user_id: str
     graph: KnowledgeGraph

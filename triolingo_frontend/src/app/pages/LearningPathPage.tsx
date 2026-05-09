@@ -2,12 +2,71 @@ import { useState } from 'react';
 import { LearningPathForm } from '../components/LearningPathForm';
 import { LearningGraph } from '../components/LearningGraph';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8000';
+
+type PathConfig = {
+  timeLimit: string;
+  experienceLevel: string;
+  motivation: string;
+};
+
+type RequestPayload = {
+  language: string;
+  goal: string;
+  timeline: string;
+  experience_level: string;
+};
+
+type PersonalizeResponse = {
+  graph: { nodes: unknown[]; edges: unknown[] };
+  llm_system: string;
+  llm_prompt: string;
+  llm_response: string;
+};
+
 export function LearningPathPage() {
-  const [pathConfig, setPathConfig] = useState<{
-    timeLimit: string;
-    experienceLevel: string;
-    motivation: string;
-  } | null>(null);
+  const [pathConfig, setPathConfig] = useState<PathConfig | null>(null);
+  const [requestPayload, setRequestPayload] = useState<RequestPayload | null>(null);
+  const [llmRequest, setLlmRequest] = useState<{ system: string; prompt: string; response: string; graph: PersonalizeResponse['graph'] } | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubmit = async (config: PathConfig) => {
+    setIsSubmitting(true);
+    setError(null);
+    setLlmRequest(null);
+
+    const payload: RequestPayload = {
+      language: 'Spanish',
+      goal: config.motivation,
+      timeline: config.timeLimit,
+      experience_level: config.experienceLevel,
+    };
+    setRequestPayload(payload);
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/personalize`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (!response.ok) {
+        throw new Error(`Request failed: ${response.status} ${response.statusText}`);
+      }
+      const data: PersonalizeResponse = await response.json();
+      setLlmRequest({
+        system: data.llm_system,
+        prompt: data.llm_prompt,
+        response: data.llm_response,
+        graph: data.graph,
+      });
+      setPathConfig(config);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Failed to submit form');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-12">
@@ -17,13 +76,50 @@ export function LearningPathPage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-1">
-          <LearningPathForm onSubmit={setPathConfig} />
+        <div className="lg:col-span-1 space-y-6">
+          <LearningPathForm onSubmit={handleSubmit} isSubmitting={isSubmitting} />
+
+          {requestPayload && (
+            <RequestPanel
+              title="Request → POST /personalize"
+              subtitle="JSON body sent from frontend to backend"
+              body={JSON.stringify(requestPayload, null, 2)}
+            />
+          )}
         </div>
 
-        <div className="lg:col-span-2">
-          {pathConfig ? (
-            <LearningGraph config={pathConfig} />
+        <div className="lg:col-span-2 space-y-6">
+          {isSubmitting ? (
+            <div className="border border-gray-800 rounded-lg bg-gray-900/30 p-12 flex items-center justify-center min-h-[600px]">
+              <p className="text-gray-400 text-center">Generating your personalized path...</p>
+            </div>
+          ) : error ? (
+            <div className="border border-red-900 rounded-lg bg-red-950/30 p-12 flex items-center justify-center min-h-[600px]">
+              <p className="text-red-400 text-center">{error}</p>
+            </div>
+          ) : pathConfig ? (
+            <>
+              <LearningGraph config={pathConfig} />
+              {llmRequest && (
+                <>
+                  <RequestPanel
+                    title="LLM request (profile + knowledge graph)"
+                    subtitle="What the backend sent to Gemini"
+                    body={`SYSTEM:\n${llmRequest.system}\n\nPROMPT:\n${llmRequest.prompt}`}
+                  />
+                  <RequestPanel
+                    title="LLM response (subgraph selection)"
+                    subtitle="Node IDs Gemini chose to keep & mark known"
+                    body={llmRequest.response}
+                  />
+                  <RequestPanel
+                    title="Resulting subgraph"
+                    subtitle={`${llmRequest.graph.nodes.length} nodes, ${llmRequest.graph.edges.length} edges sliced from the base graph`}
+                    body={JSON.stringify(llmRequest.graph, null, 2)}
+                  />
+                </>
+              )}
+            </>
           ) : (
             <div className="border border-gray-800 rounded-lg bg-gray-900/30 p-12 flex items-center justify-center min-h-[600px]">
               <p className="text-gray-500 text-center">
@@ -34,5 +130,19 @@ export function LearningPathPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+function RequestPanel({ title, subtitle, body }: { title: string; subtitle: string; body: string }) {
+  return (
+    <details className="border border-gray-800 rounded-lg bg-gray-900/30 p-4 group" open>
+      <summary className="cursor-pointer select-none">
+        <span className="text-white font-medium">{title}</span>
+        <p className="text-xs text-gray-500 mt-1">{subtitle}</p>
+      </summary>
+      <pre className="mt-3 p-3 bg-black border border-gray-800 rounded text-xs text-[#39ff14] overflow-auto max-h-96 whitespace-pre-wrap break-words">
+        {body}
+      </pre>
+    </details>
   );
 }
