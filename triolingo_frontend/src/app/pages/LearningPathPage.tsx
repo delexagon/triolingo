@@ -19,12 +19,11 @@ export function LearningPathPage() {
     try {
       const result = await personalizeGraph({
         language: 'spanish',
-        motivation: config.motivation,
-        timeLimit: config.timeLimit,
-        experienceLevel: config.experienceLevel,
+        goal: config.motivation,
+        timeline: config.timeLimit,
+        experience_level: config.experienceLevel,
       });
       setGraph(result.graph);
-      setUserId(result.user_id);
       setSubtitle(`${getTimeLabel(config.timeLimit)} · ${getMotivationLabel(config.motivation)}`);
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'Unknown error';

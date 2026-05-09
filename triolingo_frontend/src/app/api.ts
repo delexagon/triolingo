@@ -22,10 +22,10 @@ export interface KnowledgeGraph {
 
 export async function personalizeGraph(profile: {
   language: string;
-  motivation: string;
-  timeLimit: string;
-  experienceLevel: string;
-}): Promise<{ user_id: string; graph: KnowledgeGraph }> {
+  goal: string;
+  timeline: string;
+  experience_level: string;
+}): Promise<{ graph: KnowledgeGraph }> {
   const res = await fetch(`${API_BASE}/personalize`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

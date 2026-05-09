@@ -10,7 +10,10 @@ interface LearningGraphProps {
 interface LayoutNode {
   id: string;
   label: string;
-  description: string;
+  type: string;
+  difficulty: number;
+  tags: string[];
+  status: string;
   level: number;
   position: number;
   color: string;
@@ -58,7 +61,6 @@ function computeLayout(graph: KnowledgeGraph): { nodes: LayoutNode[]; edges: Lay
     }
   }
 
-  // BFS topological layering
   const level: Record<string, number> = {};
   const queue: string[] = [];
   for (const node of graph.nodes) {
@@ -80,14 +82,12 @@ function computeLayout(graph: KnowledgeGraph): { nodes: LayoutNode[]; edges: Lay
     }
   }
 
-  // Assign nodes without edges to level 0
   for (const node of graph.nodes) {
     if (level[node.id] === undefined) {
       level[node.id] = 0;
     }
   }
 
-  // Group by level and assign positions
   const levelGroups: Record<number, string[]> = {};
   for (const node of graph.nodes) {
     const l = level[node.id];
@@ -95,7 +95,6 @@ function computeLayout(graph: KnowledgeGraph): { nodes: LayoutNode[]; edges: Lay
     levelGroups[l].push(node.id);
   }
 
-  const nodeMap = new Map(graph.nodes.map(n => [n.id, n]));
   const position: Record<string, number> = {};
   for (const ids of Object.values(levelGroups)) {
     ids.forEach((id, i) => { position[id] = i; });
@@ -104,7 +103,10 @@ function computeLayout(graph: KnowledgeGraph): { nodes: LayoutNode[]; edges: Lay
   const layoutNodes: LayoutNode[] = graph.nodes.map(n => ({
     id: n.id,
     label: n.label,
-    description: `${n.type} · difficulty ${n.difficulty}`,
+    type: n.type,
+    difficulty: n.difficulty,
+    tags: n.tags,
+    status: n.status,
     level: level[n.id],
     position: position[n.id],
     color: STATUS_COLORS[n.status] ?? STATUS_COLORS.unknown,
@@ -120,15 +122,11 @@ function computeLayout(graph: KnowledgeGraph): { nodes: LayoutNode[]; edges: Lay
 
 export function LearningGraph({ graph, subtitle }: LearningGraphProps) {
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);
-  const [graph,       setGraph]       = useState<KnowledgeGraph | null>(null);
-  const [loading,     setLoading]     = useState(true);
-  const [error,       setError]       = useState<string | null>(null);
 
   const [scale, setScale] = useState(1);
   const [translate, setTranslate] = useState({ x: 0, y: 0 });
   const isPanning = useRef(false);
   const lastMouse = useRef({ x: 0, y: 0 });
-  const containerRef = useRef<HTMLDivElement>(null);
 
   const { nodes, edges } = useMemo(() => computeLayout(graph), [graph]);
 
@@ -168,41 +166,8 @@ export function LearningGraph({ graph, subtitle }: LearningGraphProps) {
 
   const handleMouseUp = useCallback(() => { isPanning.current = false; }, []);
 
-  // Call POST /personalize whenever config changes
-  useEffect(() => {
-    setLoading(true);
-    setError(null);
-    setGraph(null);
-
-    fetch(`backend`, {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify(configToProfile(config)),
-    })
-      .then(r => {
-        if (!r.ok) throw new Error(`Server error ${r.status}`);
-        return r.json() as Promise<KnowledgeGraph>;
-      })
-      .then(data => { setGraph(data); resetView(); })
-      .catch(err => setError(`Could not load graph: ${err.message}`))
-      .finally(() => setLoading(false));
-  }, [config, resetView]);
-
-  // Layout computed nodes
-  const { nodes, edges } = (() => {
-    if (!graph) return { nodes: [], edges: [] };
-    return {
-      nodes: layoutNodes(graph.nodes, graph.edges),
-      edges: graph.edges,
-    };
-  })();
-
-  const canvasW = nodes.length ? Math.max(...nodes.map(n => n.x)) + 200 : 600;
-  const canvasH = nodes.length ? Math.max(...nodes.map(n => n.y)) + 140 : 400;
-
   return (
     <div className="border border-gray-800 rounded-lg bg-gray-900/30 p-8">
-
       <div className="mb-6 flex items-start justify-between">
         <div>
           <h2 className="mb-2">Your Personalized Learning Path</h2>
@@ -282,54 +247,53 @@ export function LearningGraph({ graph, subtitle }: LearningGraphProps) {
           {nodes.map((node) => {
             const { x, y } = getNodeCoords(node);
             const isHovered = hoveredNode === node.id;
+            const statusColor = STATUS_COLORS[node.status] ?? STATUS_COLORS.unknown;
 
-              return (
-                <div
-                  key={node.id}
-                  className="graph-node absolute"
-                  style={{ left: node.x, top: node.y, transform: 'translate(-50%, -50%)', zIndex: isHovered ? 50 : 10 }}
-                  onMouseEnter={() => setHoveredNode(node.id)}
-                  onMouseLeave={() => setHoveredNode(null)}
-                >
-                  {isHovered ? (
-                    <div
-                      className="bg-black border-2 rounded-lg p-4 shadow-2xl"
-                      style={{ borderColor: node.color, minWidth: '200px', boxShadow: `0 0 24px ${node.color}30` }}
-                    >
-                      <div className="flex items-start gap-2 mb-2">
-                        <CheckCircle2 className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: node.color }} />
-                        <h3 className="font-medium text-sm leading-tight text-white">{node.label}</h3>
-                      </div>
-                      <p className="text-xs text-gray-400 capitalize mb-1">{node.type} · difficulty {node.difficulty}</p>
-                      <p className="text-xs text-gray-500 leading-relaxed">{node.tags.join(', ')}</p>
-                      <div className="mt-2 flex items-center gap-1.5">
-                        <div className="w-2 h-2 rounded-full" style={{ backgroundColor: statusColor }} />
-                        <span className="text-xs capitalize" style={{ color: statusColor }}>{node.status}</span>
-                      </div>
+            return (
+              <div
+                key={node.id}
+                className="graph-node absolute"
+                style={{ left: x, top: y, transform: 'translate(-50%, -50%)', zIndex: isHovered ? 50 : 10 }}
+                onMouseEnter={() => setHoveredNode(node.id)}
+                onMouseLeave={() => setHoveredNode(null)}
+              >
+                {isHovered ? (
+                  <div
+                    className="bg-black border-2 rounded-lg p-4 shadow-2xl"
+                    style={{ borderColor: node.color, minWidth: '200px', boxShadow: `0 0 24px ${node.color}30` }}
+                  >
+                    <div className="flex items-start gap-2 mb-2">
+                      <CheckCircle2 className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: node.color }} />
+                      <h3 className="font-medium text-sm leading-tight text-white">{node.label}</h3>
                     </div>
-                  ) : (
-                    <div
-                      className="rounded-full border-2 cursor-pointer hover:scale-110 transition-transform animate-pulse"
-                      style={{
-                        width:  NODE_RADIUS * 2,
-                        height: NODE_RADIUS * 2,
-                        borderColor:       node.color,
-                        backgroundColor:   'rgba(0,0,0,0.85)',
-                        boxShadow:         `0 0 18px ${node.color}50`,
-                        animationDuration: '3s',
-                        // outer ring reflects status
-                        outline:      `2px solid ${statusColor}`,
-                        outlineOffset: '3px',
-                      }}
-                    >
-                      <div className="w-full h-full rounded-full opacity-20" style={{ backgroundColor: node.color }} />
+                    <p className="text-xs text-gray-400 capitalize mb-1">{node.type} · difficulty {node.difficulty}</p>
+                    <p className="text-xs text-gray-500 leading-relaxed">{node.tags.join(', ')}</p>
+                    <div className="mt-2 flex items-center gap-1.5">
+                      <div className="w-2 h-2 rounded-full" style={{ backgroundColor: statusColor }} />
+                      <span className="text-xs capitalize" style={{ color: statusColor }}>{node.status}</span>
                     </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        )}
+                  </div>
+                ) : (
+                  <div
+                    className="rounded-full border-2 cursor-pointer hover:scale-110 transition-transform animate-pulse"
+                    style={{
+                      width: NODE_RADIUS * 2,
+                      height: NODE_RADIUS * 2,
+                      borderColor: node.color,
+                      backgroundColor: 'rgba(0,0,0,0.85)',
+                      boxShadow: `0 0 18px ${node.color}50`,
+                      animationDuration: '3s',
+                      outline: `2px solid ${statusColor}`,
+                      outlineOffset: '3px',
+                    }}
+                  >
+                    <div className="w-full h-full rounded-full opacity-20" style={{ backgroundColor: node.color }} />
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       <div className="mt-8 pt-6 border-t border-gray-800">
