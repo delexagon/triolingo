@@ -77,20 +77,6 @@ User Profile → Personalize Base Graph → Assessment → Update Node States �
 - **weak** — partial understanding, needs reinforcement
 - **unknown** — not yet assessed or failed assessment
 
-## Build Phases
-
-### Phase 1: Foundation (Hour 0–1)
-Base graph generated and loaded. API stubbed with dummy data. Frontend rendering dummy graph. LLM prompts tested in isolation.
-
-### Phase 2: Core Loop (Hour 1–3)
-Personalization working. Assessment running and updating graph. Path engine computing recommendations. Frontend wired to real endpoints. End-to-end flow: onboarding → personalized graph → assessment → path recommendation.
-
-### Phase 3: Close the Loop (Hour 3–5)
-Exercise generation and grading. Graph updates after practice. Frontend polish — transitions, progress bar, session plan sidebar.
-
-### Phase 4: Demo (Hour 5–6)
-Feature freeze. Bug fixes only. Practice demo twice.
-
 ## Demo Flow
 
 1. Meet the learner — "high school Spanish, traveling to Mexico in 3 weeks"
