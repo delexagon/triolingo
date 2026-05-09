@@ -1,0 +1,12 @@
+{
+  "experimentalServices": {
+    "web": {
+      "entrypoint": "triolingo_frontend",
+      "routePrefix": "/"
+    },
+    "api": {
+      "entrypoint": "backend/main.py",
+      "routePrefix": "/backend"
+    }
+  }
+}
