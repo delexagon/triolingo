@@ -5,6 +5,7 @@ import { LearningPathPage } from './pages/LearningPathPage';
 import { ProgressPage } from './pages/ProgressPage';
 import { ResourcesPage } from './pages/ResourcesPage';
 import { NotFoundPage } from './pages/NotFoundPage';
+import { AssessmentPage } from './pages/AssessmentPage';
 
 export const router = createBrowserRouter([
   {
@@ -15,6 +16,7 @@ export const router = createBrowserRouter([
       { path: 'learning-path', Component: LearningPathPage },
       { path: 'progress', Component: ProgressPage },
       { path: 'resources', Component: ResourcesPage },
+      { path: 'assessment', Component: AssessmentPage },
       { path: '*', Component: NotFoundPage },
     ],
   },
