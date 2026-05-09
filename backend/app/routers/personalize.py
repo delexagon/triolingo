@@ -4,7 +4,7 @@ import logging
 import networkx as nx
 from fastapi import APIRouter, HTTPException
 
-from ..graph_store import get_base_graph, set_user_graph
+from ..graph_store import get_base_graph, set_user_graph, set_user_profile
 from ..llm import call_llm
 from ..models import (
     GraphEdge,
@@ -48,6 +48,9 @@ def parse_llm_selection(raw: str) -> tuple[list[str], list[str]]:
     cleaned = raw.strip()
     if cleaned.startswith("```"):
         cleaned = cleaned.split("\n", 1)[1].rsplit("```", 1)[0]
+    elif cleaned.startswith("```json"):
+        cleaned = cleaned.split("\n", 1)[1].rsplit("```", 1)[0]
+
     data = json.loads(cleaned)
     keep = list(data.get("keep", []))
     known = list(data.get("known", []))
@@ -102,7 +105,11 @@ def personalize(profile: UserProfile):
         len(personalized.nodes), len(base.nodes), sum(1 for n in personalized.nodes if n.status == "known"), len(personalized.edges),
     )
 
+    # Use a simpler user_id for easier testing if needed, or keep the hash
     user_id = f"{profile.language}_{profile.goal}_{hash(profile.model_dump_json()) % 10000}"
+    user_id = user_id.replace(" ", "_").lower()
+    
     set_user_graph(user_id, personalized)
+    set_user_profile(user_id, profile)
 
     return PersonalizeResponse(graph=personalized, llm_system=system, llm_prompt=prompt, llm_response=raw)

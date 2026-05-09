@@ -6,36 +6,36 @@ export function ResourcesPage() {
       category: 'Books',
       icon: BookOpen,
       items: [
-        { name: 'Practice Makes Perfect: Spanish Verb Tenses', type: 'Grammar' },
-        { name: 'Easy Spanish Step-by-Step', type: 'Comprehensive' },
-        { name: 'Spanish Short Stories for Beginners', type: 'Reading' },
+        { name: 'Practice Makes Perfect: Spanish Verb Tenses', type: 'Grammar', link: 'https://www.amazon.com/Practice-Makes-Perfect-Spanish-Tenses/dp/0071639306' },
+        { name: 'Easy Spanish Step-by-Step', type: 'Comprehensive', link: 'https://www.amazon.com/Easy-Spanish-Step-Step/dp/0071463380' },
+        { name: 'Spanish Short Stories for Beginners', type: 'Reading', link: 'https://www.amazon.com/Spanish-Short-Stories-Beginners-Improve/dp/1721084185' },
       ],
     },
     {
       category: 'Podcasts',
       icon: Headphones,
       items: [
-        { name: 'Coffee Break Spanish', type: 'Learning' },
-        { name: 'Notes in Spanish', type: 'Conversation' },
-        { name: 'SpanishPod101', type: 'Lessons' },
+        { name: 'Immersive Spanish', type: 'Learning', link: 'https://open.spotify.com/show/6LRjQWo23lxCgtpP0Ett57?si=30560436da9544a4' },
+        { name: 'Spanish for Beginners', type: 'Conversation', link: 'https://open.spotify.com/show/6cMQaESpHzk7APjxmOVtCN?si=b444449a0e054b7e' },
+        { name: 'Dreaming Spanish', type: 'Lessons', link: 'https://open.spotify.com/show/5up150GvfRWVlNHNCLqtyW?si=daef9f4bf7974e8f' },
       ],
     },
     {
       category: 'Videos',
       icon: Video,
       items: [
-        { name: 'Butterfly Spanish', type: 'YouTube' },
-        { name: 'Dreaming Spanish', type: 'Comprehensible Input' },
-        { name: 'Easy Spanish', type: 'Street Interviews' },
+        { name: 'Butterfly Spanish', type: 'YouTube', link: 'https://www.youtube.com/@ButterflySpanish' },
+        { name: 'Dreaming Spanish', type: 'Comprehensible Input', link: 'https://www.youtube.com/@DreamingSpanish' },
+        { name: 'Easy Spanish', type: 'Street Interviews', link: 'https://www.youtube.com/@EasySpanish' },
       ],
     },
     {
       category: 'Practice',
       icon: FileText,
       items: [
-        { name: 'Conversation Exchange', type: 'Language Partners' },
-        { name: 'HelloTalk', type: 'Mobile App' },
-        { name: 'Tandem', type: 'Language Exchange' },
+        { name: 'Conversation Exchange', type: 'Language Partners', link: 'https://www.conversationexchange.com' },
+        { name: 'HelloTalk', type: 'Mobile App', link: 'https://www.hellotalk.com' },
+        { name: 'Tandem', type: 'Language Exchange', link: 'https://www.tandem.net' },
       ],
     },
   ];
@@ -64,18 +64,21 @@ export function ResourcesPage() {
 
               <div className="space-y-3">
                 {category.items.map((item, idx) => (
-                  <div
+                  <a
                     key={idx}
-                    className="flex items-center justify-between p-4 bg-black/50 rounded-lg hover:bg-black/70 transition-colors cursor-pointer group"
+                    href={item.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-between p-4 bg-black/50 rounded-lg hover:bg-black/70 transition-colors cursor-pointer group no-underline"
                   >
                     <div>
-                      <p className="font-medium group-hover:text-[#39ff14] transition-colors">
+                      <p className="font-medium group-hover:text-[#39ff14] transition-colors text-white">
                         {item.name}
                       </p>
                       <p className="text-sm text-gray-500">{item.type}</p>
                     </div>
-                    <ExternalLink className="w-4 h-4 text-gray-600 group-hover:text-[#39ff14] transition-colors" />
-                  </div>
+                    <ExternalLink className="w-4 h-4 text-gray-600 group-hover:text-[#39ff14] transition-colors flex-shrink-0" />
+                  </a>
                 ))}
               </div>
             </div>
