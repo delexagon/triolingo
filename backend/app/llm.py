@@ -1,23 +1,42 @@
 import os
+from openai import OpenAI
 
-from google import genai
-
-MODEL = "gemini-2.0-flash"
+MODEL = "meta-llama/Llama-3.1-8B-Instruct"
 
 _client = None
 
 
-def _get_client() -> genai.Client:
+def _get_client() -> OpenAI:
     global _client
     if _client is None:
-        _client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
+        api_key = os.environ.get("HF_TOKEN") or os.environ.get("LLM_API_KEY", "dummy-key")
+        base_url = os.environ.get("LLM_BASE_URL", "https://api-inference.huggingface.co/models/meta-llama/Llama-3.1-8B-Instruct/v1/")
+        if base_url.endswith("/v1"):
+            base_url += "/"
+            
+        _client = OpenAI(
+            api_key=api_key,
+            base_url=base_url
+        )
     return _client
 
 
 def call_llm(system: str, prompt: str) -> str:
-    response = _get_client().models.generate_content(
+    response = _get_client().chat.completions.create(
         model=MODEL,
-        contents=f"{system}\n\n{prompt}",
-        config={"max_output_tokens": 1024},
+        messages=[
+            {"role": "system", "content": system},
+            {"role": "user", "content": prompt}
+        ],
+        max_tokens=1024,
     )
-    return response.text
+    return response.choices[0].message.content
+
+
+def chat_llm(messages: list[dict]) -> str:
+    response = _get_client().chat.completions.create(
+        model=MODEL,
+        messages=messages,
+        max_tokens=1024,
+    )
+    return response.choices[0].message.content
