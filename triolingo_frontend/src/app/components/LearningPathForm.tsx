@@ -7,9 +7,10 @@ interface LearningPathFormProps {
     experienceLevel: string;
     motivation: string;
   }) => void;
+  isSubmitting?: boolean;
 }
 
-export function LearningPathForm({ onSubmit }: LearningPathFormProps) {
+export function LearningPathForm({ onSubmit, isSubmitting = false }: LearningPathFormProps) {
   const [timeLimit, setTimeLimit] = useState('');
   const [experienceLevel, setExperienceLevel] = useState('');
   const [motivation, setMotivation] = useState('');
@@ -88,9 +89,10 @@ export function LearningPathForm({ onSubmit }: LearningPathFormProps) {
 
         <button
           type="submit"
-          className="w-full bg-[#39ff14] hover:bg-[#2ee010] text-black font-medium py-3 px-6 rounded-lg transition-colors"
+          disabled={isSubmitting}
+          className="w-full bg-[#39ff14] hover:bg-[#2ee010] disabled:bg-gray-700 disabled:cursor-not-allowed text-black font-medium py-3 px-6 rounded-lg transition-colors"
         >
-          Generate Learning Path
+          {isSubmitting ? 'Generating...' : 'Generate Learning Path'}
         </button>
       </form>
     </div>

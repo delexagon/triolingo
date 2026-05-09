@@ -1,11 +1,12 @@
 import { Outlet, Link, useLocation } from 'react-router';
-import { Home, Map, TrendingUp, BookOpen } from 'lucide-react';
+import { Home, Map, TrendingUp, BookOpen, ClipboardCheck } from 'lucide-react';
 
 export function RootLayout() {
   const location = useLocation();
 
   const navItems = [
     { path: '/', label: 'Home', icon: Home },
+    { path: '/assessment', label: 'Assessment', icon: ClipboardCheck },
     { path: '/learning-path', label: 'Learning Path', icon: Map },
     { path: '/progress', label: 'Progress', icon: TrendingUp },
     { path: '/resources', label: 'Resources', icon: BookOpen },
